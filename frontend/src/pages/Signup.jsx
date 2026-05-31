@@ -1,6 +1,7 @@
+
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";  
+import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 const Signup = () => {
@@ -9,7 +10,7 @@ const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);  
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -18,13 +19,46 @@ const Signup = () => {
     setLoading(true);
     setError("");
 
+    if (!name.trim()) {
+      setError("Please enter your full name");
+      setLoading(false);
+      return;
+    }
+
+    if (!email.trim()) {
+      setError("Please enter your email address");
+      setLoading(false);
+      return;
+    }
+
+    if (!password) {
+      setError("Please enter a password");
+      setLoading(false);
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
+      setLoading(false);
+      return;
+    }
+
     try {
       const success = await register({ name, email, password });
       if (success) {
         navigate("/home");
+      } else {
+        setError("Registration failed. Please try again.");
       }
     } catch (err) {
-      setError(err.response?.data?.error || "Registration failed");
+      const statusCode = err.response?.status;
+      if (statusCode === 400) {
+        setError("User already exists. Please login instead.");
+      } else if (statusCode === 500) {
+        setError("Server error. Please try again later.");
+      } else {
+        setError(err.response?.data?.error || "Registration failed");
+      }
     } finally {
       setLoading(false);
     }
@@ -37,51 +71,69 @@ const Signup = () => {
 
         {error && (
           <div className="mb-4 p-3 bg-red-500/10 border border-red-500 rounded-lg">
-            <p className="text-red-400 text-sm">{error}</p>
+            <p className="text-red-400 text-sm flex items-center gap-2">
+              <span>⚠️</span> {error}
+            </p>
           </div>
         )}
 
         {/* Name Input */}
-        <input
-          type="text"
-          placeholder="Full Name"
-          autoComplete="off"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-          required
-        />
+        <div className="mb-4">
+          <label className="block text-gray-300 text-sm font-medium mb-2">
+            Full Name
+          </label>
+          <input
+            type="text"
+            placeholder="Enter your full name"
+            autoComplete="off"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
 
         {/* Email Input */}
-        <input
-          type="email"
-          placeholder="Email Address"
-          autoComplete="off"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-          required
-        />
+        <div className="mb-4">
+          <label className="block text-gray-300 text-sm font-medium mb-2">
+            Email Address
+          </label>
+          <input
+            type="email"
+            placeholder="you@example.com"
+            autoComplete="off"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
 
         {/* Password Input with Toggle */}
-        <div className="relative mb-6">
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            autoComplete="new-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-12"
-            required
-            minLength={6}
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
-          >
-            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-          </button>
+        <div className="mb-6">
+          <label className="block text-gray-300 text-sm font-medium mb-2">
+            Password
+          </label>
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Create a strong password"
+              autoComplete="new-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-12"
+              required
+              minLength={6}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
+          <p className="text-gray-500 text-xs mt-1">Password must be at least 6 characters</p>
         </div>
 
         <button
@@ -89,12 +141,22 @@ const Signup = () => {
           disabled={loading}
           className="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 disabled:opacity-50"
         >
-          {loading ? "Creating Account..." : "Sign Up"}
+          {loading ? (
+            <span className="flex items-center justify-center gap-2">
+              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Creating Account...
+            </span>
+          ) : (
+            "Sign Up"
+          )}
         </button>
 
         <p className="text-center text-gray-400 text-sm mt-6">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-400 hover:text-blue-300">
+          <Link to="/login" className="text-blue-400 hover:text-blue-300 font-medium">
             Sign In
           </Link>
         </p>
@@ -104,3 +166,6 @@ const Signup = () => {
 };
 
 export default Signup;
+
+
+
