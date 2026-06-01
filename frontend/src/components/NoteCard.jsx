@@ -338,6 +338,9 @@ const NoteCard = ({
                 <span className="badge badge-secondary bg-purple-500/10 text-purple-400 border-none mt-2 font-medium text-xs">
                   {children.length} {children.length === 1 ? "card" : "cards"}
                 </span>
+                <p className="mt-2 text-[11px] text-base-content/50">
+                  Drag this stack to reorder or merge.
+                </p>
               </div>
               <div className="flex items-center gap-1">
                 <button
@@ -577,6 +580,9 @@ const NoteCard = ({
         <div className="card-body">
           <h3 className="card-title text-base-content">{note.title}</h3>
           <p className="text-base-content/70 line-clamp-3">{note.content}</p>
+          <p className="text-[11px] text-base-content/50 -mt-1">
+            Drag this card to reorder or stack.
+          </p>
           <div className="card-actions justify-between items-center mt-4">
             <span className="text-sm text-base-content/60">
               {formatDate(new Date(note.createdAt))}
