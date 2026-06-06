@@ -82,6 +82,8 @@ The frontend is built with React and Vite, while the backend uses Express and Mo
 - [Good First Contributions](#good-first-contributions)
 - [Troubleshooting](#troubleshooting)
 - [Maintainer](#maintainer)
+- [Contributors](#contributors)
+- [Project Support](#project-support)
 - [License](#license)
 - [Issues](#issues)
 
