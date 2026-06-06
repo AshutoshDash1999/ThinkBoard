@@ -412,6 +412,32 @@ Maintained by **@niharika-mente**
 
 ---
 
+## Contributors
+
+Thanks to all the amazing people who contribute to **ThinkBoard** 🚀
+
+<p align="center">
+  <a href="https://github.com/niharika-mente/ThinkBoard/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=niharika-mente/ThinkBoard" alt="Contributors"/>
+  </a>
+</p>
+
+---
+
+## Project Support
+
+<p align="center">
+  <a href="https://github.com/niharika-mente/ThinkBoard/stargazers">
+    <img src="https://img.shields.io/github/stars/niharika-mente/ThinkBoard?style=social" alt="Stars">
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://github.com/niharika-mente/ThinkBoard/network/members">
+    <img src="https://img.shields.io/github/forks/niharika-mente/ThinkBoard?style=social" alt="Forks">
+  </a>
+</p>
+
+---
+
 ## License
 
 Distributed under the ISC License.
