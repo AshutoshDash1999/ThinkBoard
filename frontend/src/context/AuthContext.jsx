@@ -63,8 +63,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const logout = async () => {
+    try {
+      await api.post("/auth/logout");
+      setUser(null);
+      return true;
+    } catch (error) {
+      console.error("Logout API error:", error);
+      setUser(null);
+      return false;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, register, login }}>
+    <AuthContext.Provider value={{ user, loading, register, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
