@@ -1,11 +1,11 @@
 
 import { Link } from "react-router-dom";
-import { PlusIcon, Sun, Moon } from "lucide-react";
+import { PlusIcon, Sun, Moon, LogOut } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 
 const Navbar = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
   return (
@@ -33,13 +33,22 @@ const Navbar = () => {
 
             {/* Auth Buttons */}
             {user ? (
-              <Link 
-                to="/create" 
-                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
-              >
-                <PlusIcon size={16} />
-                <span>New Note</span>
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link 
+                  to="/create" 
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+                >
+                  <PlusIcon size={16} />
+                  <span>New Note</span>
+                </Link>
+                <button
+                  onClick={logout}
+                  className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-850 text-gray-700 dark:text-gray-300 font-medium rounded-lg transition-colors"
+                >
+                  <LogOut size={16} />
+                  <span>Logout</span>
+                </button>
+              </div>
             ) : (
               <div className="flex items-center gap-2">
                 <Link 
